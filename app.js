@@ -1,9 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import userRoutes from './routes/user.js';
+import mongoose from 'mongoose';
 
 //Create express app
 const app = express();
+
+mongoose.connect('mongodb://localhost:27017/myapi', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+const db = mongoose.connection;
+
+db.once('open', () => {
+    console.log("***Connected to MongoDB***");
+});
 
 //Middleware
 app.use(bodyParser.json());
