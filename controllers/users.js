@@ -18,7 +18,10 @@ export const createUser = async (req, res) => {
 
     const newUser = new User(req.body);
 
-    const saveUser = await newUser.save();
+    const saveUser = await newUser.save(function (err, doc) {
+        if (err) return console.error(err);
+        console.log("Document inserted succussfully!");
+    });
 
     // res.send('User with the name ' + user.firstName + ' added to the database!');
     res.json(saveUser);
