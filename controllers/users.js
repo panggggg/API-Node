@@ -1,6 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 uuidv4();
 import User from '../models/userInfo.js';
+import redis from 'redis';
+
+const redisClient = redis.createClient();
+
+
 
 let users = [];
 
@@ -28,8 +33,17 @@ export const createUser = async (req, res) => {
 }
 
 export const getUser = async (req, res) => {
+
+    const { id } = req.params;
     const find = await User.findById({ _id: req.params.id });
-    res.json(find);
+    // res.json(find);
+
+    const cached = redisClient.get(id);
+    if (cached) {
+        return res.json(JSON.parse(cached))
+    }
+    redisClient.set(id, find);
+
 }
 
 export const deleteUser = async (req, res) => {
