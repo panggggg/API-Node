@@ -36,14 +36,18 @@ export const getUser = async (req, res) => {
 
     const { id } = req.params;
     const find = await User.findById({ _id: req.params.id });
-    // res.json(find);
+    res.json(find);
 
 
-    const cached = redisClient.get(id);
-    redisClient.set(id, JSON.stringify(find));
-    if (cached) {
-        return res.json(find)
-    }
+    // const cached = redisClient.get(id);
+    // if (cached === null) {
+    //     // redisClient.set(id, JSON.stringify(find));
+    //     return res.json(find)
+    // }
+    // // return res.json(find)
+    // redisClient.set(id, JSON.stringify(find));
+
+
 }
 
 export const deleteUser = async (req, res) => {
